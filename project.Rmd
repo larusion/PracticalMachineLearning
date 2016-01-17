@@ -35,10 +35,10 @@ nsv
 ```
 
 
-We see that the 6th column has near zero variance. We would like to exlude it as keeping it as a predictor does not add any value. Moreover, the first column represents the row number and it should be excluded as well as done in the following.
+We see that the 6th column has near zero variance. We would like to exlude it as keeping it as a predictor does not add any value. Moreover, the first five columns provide no useful information for our prediction project and they should be excluded as well as is done in the following.
 
 ```{r}
-training2 <- training2[,-c(1,6)]
+training2 <- training2[,-(1:6)]
 ```
 
 For the method we choose "gbm" with the 10-fold cross validation.
@@ -46,8 +46,8 @@ For the method we choose "gbm" with the 10-fold cross validation.
 set.seed(33833)
 model.fit <- train(classe ~ ., method = "gbm", trControl = trainControl(method = "cv", number = 10), data = training2, verbose = FALSE)
 ```
-Below you can see the value of Kappa as in sample error. The out of sample error will bigger than that.
-```{r}
+Below you can see the value of ACCURACY as an indicator of in sample error. The higher the accuracy, the less the in sample error. Note that the out of sample error  is expected to be higher than in sample error. Thus, the accuracy of our predictions when we apply this model to a new data set which is called testing in this project, will be less than what we find below.
+```{r, echo=TRUE}
 confusionMatrix(predict(model.fit, training2), training2$classe)
 ```
 
